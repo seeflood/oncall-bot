@@ -1,0 +1,37 @@
+name: Auto Reply and Search
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-reply-and-search:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reply with greeting message
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const greeting = `Hello @${context.payload.issue.user.login},\n\nThank you for submitting an issue. We appreciate your interest in our project! \n\nI will now try to find an answer to your question.`
+            return github.issues.createComment({
+              issue_number: context.payload.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: greeting
+            })
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Search the web for an answer
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const query = context.payload.issue.title
+            const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`
+            const reply = `I found some information that may be helpful. You can check it out here: ${url}`
+            return github.issues.createComment({
+              issue_number: context.payload.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: reply
+            })
+          token: ${{ secrets.GITHUB_TOKEN }}
