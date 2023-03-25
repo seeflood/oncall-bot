@@ -19,7 +19,7 @@ jobs:
               repo: context.repo.repo,
               body: greeting
             })
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Search the web for an answer
         uses: actions/github-script@v4
