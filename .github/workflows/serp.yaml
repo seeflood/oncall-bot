@@ -49,7 +49,7 @@ jobs:
           REPLY="Here are the top ${RESULTS_COUNT} results from Google:\n"
           for ((i=0; i<$RESULTS_COUNT; i++)); do
             TITLE=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].title")
-            URL=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].url")
+            URL=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].link")
             REPLY="${REPLY}• [${TITLE}](${URL})\n"
           done
           REPLY=$(echo "$REPLY" | sed 's/"/\\"/g')
