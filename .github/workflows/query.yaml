@@ -34,4 +34,4 @@ jobs:
               repo: context.repo.repo,
               body: reply
             })
-          token: ${{ secrets.GOOGLE_TOKEN }}
+          github-token: ${{ secrets.GOOGLE_TOKEN }}
