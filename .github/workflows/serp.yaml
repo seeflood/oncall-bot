@@ -8,6 +8,19 @@ jobs:
   auto-reply-and-search:
     runs-on: ubuntu-latest
     steps:
+      - name: Reply with greeting message
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const greeting = `Hello @${context.payload.issue.user.login},\n\nThank you for submitting an issue. We appreciate your interest in our project! \n\nI will now try to find an answer to your question.`
+            return github.issues.createComment({
+              issue_number: context.payload.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: greeting
+            })
+          github-token: ${{ secrets.GOOGLE_TOKEN }}
+          
       # - name: Get search results
       #   uses: actions/http-request@v1
       #   with:
@@ -43,3 +56,18 @@ jobs:
           curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$REPLY\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
 
         if: ${{ success() }}
+
+      # - name: Reply with google url
+      #   uses: actions/github-script@v4
+      #   with:
+      #     script: |
+      #       const query = context.payload.issue.title
+      #       const url = `https://www.google.com/search?q=${encodeURIComponent(query)}`
+      #       const reply = `I found some information that may be helpful. You can check it out here: ${url}`
+      #       return github.issues.createComment({
+      #         issue_number: context.payload.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: reply
+      #       })
+      #     github-token: ${{ secrets.GOOGLE_TOKEN }}
