@@ -8,18 +8,18 @@ jobs:
   auto-reply-and-search:
     runs-on: ubuntu-latest
     steps:
-      - name: Get search results
-        uses: actions/http-request@v1
-        with:
-          url: 'https://api.serpstack.com/search'
-          method: 'GET'
-          querystring: |
-            access_key: ${{ secrets.SERPSTACK_ACCESS_KEY }}
-            query: ${{ github.event.issue.title }}
-            num: 5
-            output: json
-        id: search-results
-        continue-on-error: true
+      # - name: Get search results
+      #   uses: actions/http-request@v1
+      #   with:
+      #     url: 'https://api.serpstack.com/search'
+      #     method: 'GET'
+      #     querystring: |
+      #       access_key: ${{ secrets.SERPSTACK_ACCESS_KEY }}
+      #       query: ${{ github.event.issue.title }}
+      #       num: 5
+      #       output: json
+      #   id: search-results
+      #   continue-on-error: true
 
       - name: Get search results
         run: |
