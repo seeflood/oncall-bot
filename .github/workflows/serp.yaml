@@ -21,20 +21,21 @@ jobs:
         id: search-results
         continue-on-error: true
 
+      - name: Get search results
+        run: |
+          curl -s "https://serpapi.com/search?q=${{ github.event.issue.title }}&num=5&engine=google&api_key=${{ secrets.SERPSTACK_ACCESS_KEY }}" > search_results.json
+        id: search-results
+
       - name: Reply with search results
-        if: steps.search-results.outputs.status == 200
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const results = JSON.parse('${{ steps.search-results.outputs.body }}')
-            const reply = `Here are the top ${results.organic_results.length} results from Google:\n\n`
-            for (const result of results.organic_results) {
-              reply += `• [${result.title}](${result.url})\n`
-            }
-            return github.issues.createComment({
-              issue_number: context.payload.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: reply
-            })
-          github-token: ${{ secrets.SERPSTACK_ACCESS_KEY }}
+        run: |
+          SEARCH_RESULTS=$(cat search_results.json)
+          RESULTS_COUNT=$(echo "$SEARCH_RESULTS" | jq '.organic_results | length')
+          REPLY="Here are the top ${RESULTS_COUNT} results from Google:\n\n"
+          for ((i=0; i<$RESULTS_COUNT; i++)); do
+            TITLE=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].title")
+            URL=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].url")
+            REPLY="${REPLY}• [${TITLE}](${URL})\n"
+          done
+          curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -X POST -d "{\"body\": \"$REPLY\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
+
+        if: ${{ success() }}
