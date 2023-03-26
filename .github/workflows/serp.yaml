@@ -23,7 +23,7 @@ jobs:
 
       - name: Get search results
         run: |
-          query=$(echo ${{ github.event.issue.title }} | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))")
+          query=$(echo "${{ github.event.issue.title }}" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote(sys.stdin.read().strip()))")
           curl -s "https://serpapi.com/search?q=${query}&num=5&engine=google&api_key=${{ secrets.SERPSTACK_ACCESS_KEY }}" > search_results.json
         id: search-results
 
