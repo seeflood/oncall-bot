@@ -44,6 +44,7 @@ jobs:
       - name: Reply with search results
         run: |
           SEARCH_RESULTS=$(cat search_results.json)
+          echo "$SEARCH_RESULTS"
           RESULTS_COUNT=$(echo "$SEARCH_RESULTS" | jq '.organic_results | length')
           REPLY="Here are the top ${RESULTS_COUNT} results from Google:\n"
           for ((i=0; i<$RESULTS_COUNT; i++)); do
