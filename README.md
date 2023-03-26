@@ -1,12 +1,14 @@
 ## Oncall Bot
-Reply to new issues with search results.
+Reply to new issues automatically using AI and search engine.
 
 Example:
 
-<img width="813" alt="image" src="https://user-images.githubusercontent.com/26001097/227751520-5f86d7a5-06db-4968-adc0-3dba772246cd.png">
+https://github.com/seeflood/oncall-bot/issues/38
+
+<img width="819" alt="image" src="https://user-images.githubusercontent.com/26001097/227761842-db7181be-b8c9-48bb-aa30-bf572bdf2a21.png">
 
 ## TODO
+- [ ] Let LLM summarize the search result
 - [ ] Issue Classification. For example, if someone submits a proposal, we shouldn't reply with search results
-- [ ] Reply with LLM 
 - [ ] Reusable workflow
 - [ ] Search specific sites only
