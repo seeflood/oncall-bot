@@ -95,8 +95,9 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const chatResponse = JSON.parse(${{ steps.chat-response.outputs }});
-            console.log(chatResponse);
+            const chatResponse = ${{ steps.chat-response.outputs }};
+            console.log("got chatResponse:");
+            console.log(JSON.stringify(chatResponse));
             const messageContent = chatResponse.choices[0].message.content;
             console.log(messageContent);
             return github.issues.createComment({
