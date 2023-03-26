@@ -92,8 +92,19 @@ jobs:
         id: chat-response
 
       - name: Reply with chat response
-        run: |
-          CHAT_RESPONSE=$(echo "$(<${{ steps.chat-response.outputs.body }})" | jq -r '.choices[0].message.content')
-          echo "$CHAT_RESPONSE"
-          curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$CHAT_RESPONSE\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const chatResponse = JSON.parse(${{ steps.chat-response.outputs }});
+            console.log(chatResponse);
+            const messageContent = chatResponse.choices[0].message.content;
+            console.log(messageContent);
+            return github.issues.createComment({
+              issue_number: context.payload.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: messageContent
+            })
+          github-token: ${{ secrets.GOOGLE_TOKEN }}
+          
         if: ${{ success() }}
