@@ -38,6 +38,7 @@ jobs:
             URL=$(echo "$SEARCH_RESULTS" | jq -r ".organic_results[$i].url")
             REPLY="${REPLY}• [${TITLE}](${URL})\n"
           done
+          REPLY=$(echo -n -e "$REPLY" | python3 -c "import sys, urllib.parse; print(urllib.parse.quote_plus(sys.stdin.read().strip()))"
           echo $REPLY
           curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$REPLY\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
 
