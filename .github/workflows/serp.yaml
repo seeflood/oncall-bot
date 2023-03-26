@@ -33,30 +33,6 @@ jobs:
       #       output: json
       #   id: search-results
       #   continue-on-error: true
-      
-      - name: Get chat response
-        uses: fjogeleit/http-request-action@v1
-        with:
-          url: 'https://api.openai.com/v1/engine/davinci-codex/completions'
-          method: 'POST'
-          customHeaders: '{"Authorization": "Bearer ${{ secrets.OPENAI_API_KEY }}", "Content-Type": "application/json"}'
-          data: |
-            {
-              "prompt": "${{ github.event.issue.title }}",
-              "temperature": 0.7,
-              "max_tokens": 60,
-              "top_p": 1,
-              "frequency_penalty": 0,
-              "presence_penalty": 0
-            }
-        id: chat-response
-
-      - name: Reply with chat response
-        run: |
-          CHAT_RESPONSE=$(echo "$(<${{ steps.chat-response.outputs.body }})" | jq -r '.choices[0].text')
-          echo "$CHAT_RESPONSE"
-          curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$CHAT_RESPONSE\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
-        if: ${{ success() }}
 
       - name: Get search results
         run: |
@@ -96,3 +72,28 @@ jobs:
       #         body: reply
       #       })
       #     github-token: ${{ secrets.GOOGLE_TOKEN }}
+            
+      - name: Get chat response
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://api.openai.com/v1/chat/completions'
+          method: 'POST'
+          customHeaders: '{"Authorization": "Bearer ${{ secrets.OPENAI_API_KEY }}", "Content-Type": "application/json"}'
+          data: |
+            {
+              "model": "gpt-3.5-turbo",
+              "messages": [{"role": "user", "content": "${{ github.event.issue.title }}"}],
+              "temperature": 0.7,
+              "max_tokens": 60,
+              "top_p": 1,
+              "frequency_penalty": 0,
+              "presence_penalty": 0
+            }
+        id: chat-response
+
+      - name: Reply with chat response
+        run: |
+          CHAT_RESPONSE=$(echo "$(<${{ steps.chat-response.outputs.body }})" | jq -r '.choices[0].text')
+          echo "$CHAT_RESPONSE"
+          curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$CHAT_RESPONSE\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
+        if: ${{ success() }}
