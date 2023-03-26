@@ -19,7 +19,7 @@ jobs:
               repo: context.repo.repo,
               body: greeting
             })
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GOOGLE_TOKEN }}
           
       - name: Search the web for an answer
         uses: actions/github-script@v4
@@ -34,4 +34,4 @@ jobs:
               repo: context.repo.repo,
               body: reply
             })
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GOOGLE_TOKEN }}

@@ -13,7 +13,7 @@ jobs:
       - name: Like pizza
         uses: actions/github-script@v4
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{secrets.GOOGLE_TOKEN}}
           script: |
             const {owner, repo} = context.issue
             github.reactions.createForIssueComment({
