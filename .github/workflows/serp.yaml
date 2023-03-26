@@ -95,10 +95,10 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const chatResponse = ${{ steps.chat-response.outputs }};
+            const chatResponse = ${{ steps.chat-response.outputs.response }};
             console.log("got chatResponse:");
-            console.log(JSON.stringify(chatResponse));
-            const messageContent = chatResponse.choices[0].message.content;
+            console.log(chatResponse);
+            const messageContent = JSON.parse(chatResponse).choices[0].message.content;
             console.log(messageContent);
             return github.issues.createComment({
               issue_number: context.payload.issue.number,
