@@ -33,15 +33,14 @@ jobs:
       #       output: json
       #   id: search-results
       #   continue-on-error: true
+      
       - name: Get chat response
-        uses: actions/http-request@v1
+        uses: fjogeleit/http-request-action@v1
         with:
           url: 'https://api.openai.com/v1/engine/davinci-codex/completions'
           method: 'POST'
-          headers: |
-            Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}
-            Content-Type: application/json
-          body: |
+          customHeaders: '{"Authorization": "Bearer ${{ secrets.OPENAI_API_KEY }}", "Content-Type": "application/json"}'
+          data: |
             {
               "prompt": "${{ github.event.issue.title }}",
               "temperature": 0.7,
