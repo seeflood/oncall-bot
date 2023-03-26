@@ -6,7 +6,7 @@ Example:
 <img width="813" alt="image" src="https://user-images.githubusercontent.com/26001097/227751520-5f86d7a5-06db-4968-adc0-3dba772246cd.png">
 
 ## TODO
-- [ ] Issue Classification. For example, if someone submits a proposal, we should reply with search results
+- [ ] Issue Classification. For example, if someone submits a proposal, we shouldn't reply with search results
 - [ ] Reply with LLM 
 - [ ] Reusable workflow
 - [ ] Search specific sites only
