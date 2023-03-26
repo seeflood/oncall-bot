@@ -77,7 +77,7 @@ jobs:
           TITLE=$(echo "${{ github.event.issue.title }}" | sed 's/"/\\"/g')
           CONTENT=$(echo "${{ github.event.issue.body }}" | sed 's/"/\\"/g')
           PROMPT="${TITLE}\n\n${CONTENT}"
-          echo $PROMPT
+          echo echo "test=${PROMPT}" >> "$GITHUB_OUTPUT"
         id: prompt
       
       - name: Get chat response
