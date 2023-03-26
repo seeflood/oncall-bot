@@ -23,7 +23,7 @@ jobs:
 
       - name: Get search results
         run: |
-          curl -s "https://serpapi.com/search?q=${{ github.event.issue.title }}&num=5&engine=google&api_key=${{ secrets.SERPSTACK_ACCESS_KEY }}" > search_results.json
+          curl -s "https://serpapi.com/search?q=${encodeURIComponent(${{ github.event.issue.title }})}&num=5&engine=google&api_key=${{ secrets.SERPSTACK_ACCESS_KEY }}" > search_results.json
         id: search-results
 
       - name: Reply with search results
