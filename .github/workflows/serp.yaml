@@ -93,7 +93,7 @@ jobs:
 
       - name: Reply with chat response
         run: |
-          CHAT_RESPONSE=$(echo "$(<${{ steps.chat-response.outputs.body }})" | jq -r '.choices[0].text')
+          CHAT_RESPONSE=$(echo "$(<${{ steps.chat-response.outputs.body }})" | jq -r '.choices[0].message.content')
           echo "$CHAT_RESPONSE"
           curl -s -H "Authorization: token ${{ secrets.GOOGLE_TOKEN }}" -X POST -d "{\"body\": \"$CHAT_RESPONSE\"}" "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments"
         if: ${{ success() }}
