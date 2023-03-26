@@ -74,12 +74,15 @@ jobs:
       #     github-token: ${{ secrets.GOOGLE_TOKEN }}
 
       - name: Concatenate issue title and issue content
-        run: |
-          const title = context.payload.issue.title;
-          const content = context.payload.issue.body;
-          const prompt = `${title}\n\n${content}`;
-          console.log(prompt);
-          core.setOutput("text", prompt);
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const title = context.payload.issue.title;
+            const content = context.payload.issue.body;
+            const prompt = `${title}\n\n${content}`;
+            console.log(prompt);
+            core.setOutput("text", prompt);
+          github-token: ${{ secrets.GOOGLE_TOKEN }}
         id: prompt
 
       - name: Get chat response
