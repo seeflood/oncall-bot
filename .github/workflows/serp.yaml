@@ -1,0 +1,40 @@
+name: Auto Reply and Search
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  auto-reply-and-search:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get search results
+        uses: actions/http-request@v1
+        with:
+          url: 'https://api.serpstack.com/search'
+          method: 'GET'
+          querystring: |
+            access_key: ${{ secrets.SERPSTACK_ACCESS_KEY }}
+            query: ${{ github.event.issue.title }}
+            num: 5
+            output: json
+        id: search-results
+        continue-on-error: true
+
+      - name: Reply with search results
+        if: steps.search-results.outputs.status == 200
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const results = JSON.parse('${{ steps.search-results.outputs.body }}')
+            const reply = `Here are the top ${results.organic_results.length} results from Google:\n\n`
+            for (const result of results.organic_results) {
+              reply += `• [${result.title}](${result.url})\n`
+            }
+            return github.issues.createComment({
+              issue_number: context.payload.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: reply
+            })
+          github-token: ${{ secrets.SERPSTACK_ACCESS_KEY }}
