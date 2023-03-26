@@ -10,6 +10,7 @@ https://github.com/seeflood/oncall-bot/issues/38
 ## TODO
 - [ ] Improve the prompt. Include the issue content.
 - [ ] Let LLM summarize the search result
+- [ ] Invoke new bing API directly?
 - [ ] Issue Classification. For example, if someone submits a proposal, we shouldn't reply with search results
 - [ ] Reusable workflow
 - [ ] Search specific sites only
