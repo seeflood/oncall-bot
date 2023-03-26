@@ -72,14 +72,16 @@ jobs:
       #         body: reply
       #       })
       #     github-token: ${{ secrets.GOOGLE_TOKEN }}
+
       - name: Concatenate issue title and issue content
         run: |
-          TITLE=$(echo "${{ github.event.issue.title }}" | sed 's/"/\\"/g')
-          CONTENT=$(echo "${{ github.event.issue.body }}" | sed 's/"/\\"/g')
-          PROMPT="${TITLE}\n\n${CONTENT}"
-          echo echo "prompt=${PROMPT}" >> "$GITHUB_OUTPUT"
+          const title = context.payload.issue.title;
+          const content = context.payload.issue.body;
+          const prompt = `${title}\n\n${content}`;
+          console.log(prompt);
+          core.setOutput("text", prompt);
         id: prompt
-      
+
       - name: Get chat response
         uses: fjogeleit/http-request-action@v1
         with:
@@ -90,7 +92,7 @@ jobs:
           data: |
             {
               "model": "gpt-3.5-turbo",
-              "messages": [{"role": "user", "content": "${{ steps.prompt.outputs.prompt }}"}],
+              "messages": [{"role": "user", "content": "${{ steps.prompt.outputs.text }}"}],
               "temperature": 0.7,
               "max_tokens": 200,
               "top_p": 1,
