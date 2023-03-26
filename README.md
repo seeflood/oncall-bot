@@ -1,4 +1,4 @@
-## Oncall Bot
+## On-call Bot
 Reply to new issues automatically using AI and search engine.
 
 Example:
