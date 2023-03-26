@@ -79,7 +79,7 @@ jobs:
           script: |
             const title = context.payload.issue.title;
             const content = context.payload.issue.body;
-            const prompt = `${title}\n\n${content}`;
+            const prompt = `${title} ${content}`;
             console.log(prompt);
             core.setOutput("text", prompt);
           github-token: ${{ secrets.GOOGLE_TOKEN }}
